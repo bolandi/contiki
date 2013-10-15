@@ -1024,7 +1024,7 @@ ctrlparam_handler(void* request, void* response, uint8_t *buffer, uint16_t prefe
 
 
 PROCESS(rest_server_example, "Erbium Example Server");
-AUTOSTART_PROCESSES(&rest_server_example);
+AUTOSTART_PROCESSES(&rest_server_example, &dcdc_client);
 
 PROCESS_THREAD(rest_server_example, ev, data)
 {

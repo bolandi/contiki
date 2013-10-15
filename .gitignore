@@ -30,6 +30,7 @@ summary
 *.faillog
 *.orig
 .project
+.cproject
 *~
 .DS_Store
 obj_*
