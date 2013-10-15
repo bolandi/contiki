@@ -29,6 +29,7 @@ summary
 *.summary
 *.faillog
 *.orig
+.project
 *~
 .DS_Store
 obj_*
