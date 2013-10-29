@@ -59,4 +59,11 @@ typedef unsigned int uip_stats_t;
 #define USB_EP2_SIZE 64
 
 #define RAND_MAX 0x7fff
+
+/* UIP_CONF_ROUTER specifies if the IPv6 node should be a router or
+   not. By default, all Contiki nodes are routers. */
+#ifndef UIP_CONF_ROUTER
+#define UIP_CONF_ROUTER 0
+#endif /* UIP_CONF_ROUTER */
+
 #endif /* __CONTIKI_CONF_H__CDBB4VIH3I__ */
