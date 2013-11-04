@@ -168,7 +168,7 @@ printf("RTIMER_ARCH_SECOND %d\n",RTIMER_ARCH_SECOND);
     PROCESS_YIELD();
 
     if (etimer_expired(&et)) {
-      printf("--Sending beacon to mgserver--\n");
+//      printf("--Sending beacon to mgserver--\n");
 
       /* prepare request, TID is set by COAP_BLOCKING_REQUEST() */
       coap_init_message(request, COAP_TYPE_CON, COAP_POST, 0 );
@@ -187,7 +187,7 @@ printf("RTIMER_ARCH_SECOND %d\n",RTIMER_ARCH_SECOND);
       PRINT6ADDR(&server_ipaddr);
       PRINTF(" : %u\n", UIP_HTONS(REMOTE_PORT));
 
-      COAP_BLOCKING_REQUEST(&server_ipaddr, REMOTE_PORT, request, client_chunk_handler);
+//      COAP_BLOCKING_REQUEST(&server_ipaddr, REMOTE_PORT, request, client_chunk_handler);
 
       printf("\n--Done--\n");
 
