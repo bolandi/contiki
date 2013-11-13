@@ -154,6 +154,13 @@ uip_nd6_ns_input(void)
   PRINTF(" with target address");
   PRINT6ADDR((uip_ipaddr_t *) (&UIP_ND6_NS_BUF->tgtipaddr));
   PRINTF("\n");
+
+  if (((uint8_t *)&UIP_IP_BUF->srcipaddr)[0] == 0xfe && ((uint8_t *)&UIP_IP_BUF->srcipaddr)[1] == 0x80)
+  {
+	  PRINTF("Not sending link local NA");
+	  goto discard;
+  }
+
   UIP_STAT(++uip_stat.nd6.recv);
 
 #if UIP_CONF_IPV6_CHECKS
