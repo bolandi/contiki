@@ -66,4 +66,6 @@ typedef unsigned int uip_stats_t;
 #define UIP_CONF_ROUTER 0
 #endif /* UIP_CONF_ROUTER */
 
+#define RIMEADDR_CONF_SIZE 8
+
 #endif /* __CONTIKI_CONF_H__CDBB4VIH3I__ */
