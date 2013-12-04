@@ -155,12 +155,6 @@ uip_nd6_ns_input(void)
   PRINT6ADDR((uip_ipaddr_t *) (&UIP_ND6_NS_BUF->tgtipaddr));
   PRINTF("\n");
 
-//  if (((uint8_t *)&UIP_IP_BUF->srcipaddr)[0] == 0xfe && ((uint8_t *)&UIP_IP_BUF->srcipaddr)[1] == 0x80)
-//  {
-//	  PRINTF("Not sending link local NA");
-//	  goto discard;
-//  }
-
   UIP_STAT(++uip_stat.nd6.recv);
 
 #if UIP_CONF_IPV6_CHECKS
@@ -184,8 +178,6 @@ uip_nd6_ns_input(void)
 #endif /* UIP_CONF_IPV6_CHECKS */
     switch (UIP_ND6_OPT_HDR_BUF->type) {
     case UIP_ND6_OPT_SLLAO:
-      PRINTF ("rs_input: Skip processing SLLAO option ...\n");
-      break;
       nd6_opt_llao = &uip_buf[uip_l2_l3_icmp_hdr_len + nd6_opt_offset];
 #if UIP_CONF_IPV6_CHECKS
       /* There must be NO option in a DAD NS */
@@ -813,8 +805,6 @@ uip_nd6_ra_input(void)
     }
     switch (UIP_ND6_OPT_HDR_BUF->type) {
     case UIP_ND6_OPT_SLLAO:
-        PRINTF ("ra_input: Skip processing SLLAO option ...\n");
-        break;
       PRINTF("Processing SLLAO option in RA\n");
       nd6_opt_llao = (uint8_t *) UIP_ND6_OPT_HDR_BUF;
       nbr = uip_ds6_nbr_lookup(&UIP_IP_BUF->srcipaddr);
