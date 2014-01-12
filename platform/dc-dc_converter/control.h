@@ -67,6 +67,7 @@ typedef enum
         VREF = 0,
         IMAX,
         VMAX,
+        PRIO_REF,
 }ctrl_params_t;
 
 typedef enum
@@ -75,6 +76,7 @@ typedef enum
         VIN,
         IOUT,
         IIN,
+        PRIO,
 }svector_t;
 
 char* strtrim(char *str, char *newStr);

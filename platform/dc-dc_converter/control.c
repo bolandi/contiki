@@ -53,7 +53,7 @@
 int Vref, Imax, Vmax;
 int Vout, Vin, Il;
 int Vo, Vi, Io, Ii;
-int i, Vom, Vim, Iom, Iim;
+int i, Vom, Vim, Iom, Iim, Prio;
 
 int Iref;
 extern int ADC[4];
@@ -227,7 +227,15 @@ int set_ctrl_params(ctrl_params_t var, float value)
 			else
 				error=1;
 			break;
-
+		case PRIO_REF:
+			if ((value >= 5) && (value <= 25))
+			{
+				Prio = (int) value;
+				/* [TODO] set prio value and call a function with intended logic */
+			}
+			else
+				error=1;
+			break;
 	}
 	return error;
 }
@@ -267,6 +275,9 @@ float get_svector(svector_t var)
 			break;
 		case IIN:
 			result = (Ii * Vdd * 2) / (4095 * 0.151);
+			break;
+		case PRIO:
+			result = Prio;
 			break;
 	}
 	return result;

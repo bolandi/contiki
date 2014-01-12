@@ -73,8 +73,6 @@ main()
   process_start(&etimer_process, NULL);
   printf("Starting EMAC service\n");
   process_start(&emac_lpc1768, NULL);
-  printf("Starting TCP/IP service\n");
-  process_start(&tcpip_process, NULL);          // invokes uip_init();
 
 #if UIP_CONF_IPV6
   // init MAC address
@@ -84,13 +82,6 @@ main()
   uip_lladdr.addr[3] = EMAC_ADDR3;
   uip_lladdr.addr[4] = EMAC_ADDR4;
   uip_lladdr.addr[5] = EMAC_ADDR5;
-
-  uip_ds6_addr_t *lladdr;
-  lladdr = uip_ds6_get_link_local(-1);
-
-  printf("Tentative link-local IPv6 address:");
-  uip_debug_ipaddr_print(&(lladdr->ipaddr));
-  printf("\n");
 
   // Configure global IPv6 address
   //uip_ipaddr_t ipaddr;
@@ -128,7 +119,17 @@ main()
   uip_setdraddr(&addr);
 #endif
 
-  //Start the dc-dc converter control process
+  printf("Starting TCP/IP service\n");
+  process_start(&tcpip_process, NULL);          // invokes uip_init();
+  {
+	  uip_ds6_addr_t *lladdr;
+  	  lladdr = uip_ds6_get_link_local(-1);
+
+	  printf("Tentative link-local IPv6 address:");
+	  uip_debug_ipaddr_print(&(lladdr->ipaddr));
+	  printf("\n");
+  }
+
   printf("Starting the Bang-Bang control process\n");
   process_start(&bang_control_process, NULL);
 

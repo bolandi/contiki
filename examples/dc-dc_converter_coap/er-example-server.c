@@ -881,7 +881,7 @@ radio_handler(void* request, void* response, uint8_t *buffer, uint16_t preferred
 
 #if REST_RES_SVECTOR
 //State vector of the DC-DC converter
-RESOURCE(svector, METHOD_GET, "dc-dc/stateVector", "title=\"State vector of the DC-DC converter(Vout, Iout, Vin, In, bangAlgorithmState), supports JSON\";rt=\"StateVector\"");
+RESOURCE(svector, METHOD_GET, "dc-dc/stateVector", "title=\"State vector of the DC-DC converter(Vout, Iout, Vin, Iin, Prio bangAlgorithmState), supports JSON\";rt=\"StateVector\"");
 void
 svector_handler(void* request, void* response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
@@ -889,6 +889,7 @@ svector_handler(void* request, void* response, uint8_t *buffer, uint16_t preferr
   float iout_value= get_svector(IOUT);
   float vin_value= get_svector(VIN);
   float iin_value= get_svector(IIN);
+  int prio_value=get_svector(PRIO);
   char * converter_state_string= get_converter_state();
 
   const uint16_t *accept = NULL;
@@ -897,21 +898,21 @@ svector_handler(void* request, void* response, uint8_t *buffer, uint16_t preferr
   if ((num==0) || (num && accept[0]==REST.type.TEXT_PLAIN))
   {
     REST.set_header_content_type(response, REST.type.TEXT_PLAIN);
-    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, "State:\t%s\nVout:\t%fV\nIout:\t%fA\nVin:\t%fV\nIin:\t%fA", converter_state_string, vout_value, iout_value, vin_value, iin_value);
+    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, "State:\t%s\nVout:\t%fV\nIout:\t%fA\nVin:\t%fV\nIin:\t%fA\nPrio:\t%d", converter_state_string, vout_value, iout_value, vin_value, iin_value, prio_value);
 
     REST.set_response_payload(response, (uint8_t *)buffer, strlen((char *)buffer));
   }
   else if (num && (accept[0]==REST.type.APPLICATION_XML))
   {
     REST.set_header_content_type(response, REST.type.APPLICATION_XML);
-    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, "<vout=\"%f\" iout=\"%f\" vin=\"%f\" iin=\"%f\" bangState=\"%s\"/>", vout_value, iout_value, vin_value, iin_value, converter_state_string);
+    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, "<vout=\"%f\" iout=\"%f\" vin=\"%f\" iin=\"%f\" prio=\"%d\" bangState=\"%s\"/>", vout_value, iout_value, vin_value, iin_value, prio_value, converter_state_string);
 
     REST.set_response_payload(response, buffer, strlen((char *)buffer));
   }
   else if (num && (accept[0]==REST.type.APPLICATION_JSON))
   {
     REST.set_header_content_type(response, REST.type.APPLICATION_JSON);
-    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, "{'svector':{'vout':%f, 'iout':%f, 'vin':%f, 'iin':%f 'bangState':%s}}", vout_value, iout_value, vin_value, iin_value, converter_state_string);
+    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, "{'svector':{'vout':%f, 'iout':%f, 'vin':%f, 'iin':%f 'prio':%d 'bangState':%s}}", vout_value, iout_value, vin_value, iin_value, prio_value, converter_state_string);
     REST.set_response_payload(response, buffer, strlen((char *)buffer));
   }
   else
@@ -977,6 +978,12 @@ ctrlparam_handler(void* request, void* response, uint8_t *buffer, uint16_t prefe
           if (set_ctrl_params(IMAX, i_max))
                 PRINTF("Value out of range: must be 0 <= Imax <= 6");
           //printf("The new value of Imax is %f\n", getConverterParameter(CONV_IMAX));
+      }
+      if (REST.get_post_variable(request, "Prio", &variable) > 0)
+      {
+          int prio=atoi(variable);
+          if (set_ctrl_params(PRIO_REF, prio))
+                PRINTF("Value out of range: must be 5 <= Prio <= 25");
       }
   }
   else
